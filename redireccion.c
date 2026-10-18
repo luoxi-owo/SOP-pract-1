@@ -112,11 +112,14 @@ int redirigir_salida(int i)
 
 int cerrar_fd()
 {
-	int i=3;
-	while(i<3){
-		close(3);
+	int i=0;
+	while(i < PIPELINE -1 ){
+		if (red_ordenes[i].entrada >2) close(red_ordenes[i].entrada); // comprobamos que estamos en la posición correcta para no eliminar una posicion erronea
+		if (red_ordenes[i].salida >2) close(red_ordenes[i].salida);
 		i++;
 	}
+
+	return OK;
 } // Fin de la función "cerrar_fd"
 
 

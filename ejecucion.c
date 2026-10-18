@@ -35,4 +35,5 @@ int ejecutar (int nordenes , int *nargs , char **ordenes , char ***args , int bg
 	while(wait(NULL)!=-1);
 	
 	}
+	return OK;
 } // Fin de la funcion "ejecutar"

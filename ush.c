@@ -107,7 +107,8 @@ int leerLinea( char *linea, int maxLinea )
 	
 	char* a=getcwd(cwd,sizeof(cwd));
 
-	printf("%s:%s$",PROMPT,a);
+
+	printf("\033[1;35m%s\033[0m:\033[1;34m%s\033[0m$ ", PROMPT, a); 
 
 	do{
 	//Conseguir caracter, guardarlo en la linea.
@@ -158,13 +159,19 @@ void visualizar( void )
 	char *f_s=fich_salida();
 	char *f_e=fich_entrada();
 	
+    printf("\n");
+    printf("   /\\_/\\     +-----------------------------------+\n");
+    printf("  ( o.o )    |         VISUALIZAR ORDEN          |\n");
+    printf("   > ^ <     +-----------------------------------+\n");
+
+	
 	while(i<n){
-		printf("Orden %d: %s \n",i+1,ordenes[i]);
+		printf("-->Orden %d: %s \n",i+1,ordenes[i]);
 		
-		printf("Numero de argumentos %d \n",na[i]);
+		printf("-->Numero de argumentos: %d \n",na[i]);
 				
 		while(j<na[i]){
-			printf("Los argumentos son: %s \n",g_arg[i][j]);
+			printf("-->Los argumentos son: %s \n",g_arg[i][j]);
 			j++;
 		
 		}	
@@ -175,30 +182,30 @@ void visualizar( void )
 	}
 
 	if(f_e[0]=='\0'){
-		printf("No hay fichero de entrada\n");
+		printf("-->No hay fichero de entrada\n");
 	}else{
-		printf("Fichero entrada: %s \n",f_e);
+		printf("-->Fichero entrada: %s \n",f_e);
 	}
 
 	if(f_s[0]!='\0'){
-		printf("Fichero salida: %s \n",f_s);
+		printf("-->Fichero salida: %s \n",f_s);
 		int mod=es_append();
 		if(mod==1){
-			printf("Modo append \n");
+			printf("-->Modo append \n");
 		}
 		else if(mod==0){
-			printf("Modo Trunc \n");
+			printf("-->Modo Trunc \n");
 		}else{
-		printf("Modo desconocido \n");
+		printf("-->Modo desconocido \n");
 		}
 	}else{
-		printf("No hay redireccion de salida \n");
+		printf("-->No hay redireccion de salida \n");
 	}
 
 	if (es_background()==1){
-		printf("Esta siendo ejecutado en background \n");
+		printf("-->Esta siendo ejecutado en background \n");
 	}else{
-		printf("Esta siendo ejecutado en foreground \n");
+		printf("-->Esta siendo ejecutado en foreground \n");
 	}
 
 } // Fin de "visualizar"
