@@ -41,6 +41,7 @@ int main(int argc, char * argv[]){
     
     do
     {
+    	informar_bg(); /* avisa de las ordenes en background que han terminado*/
         res=leerLinea(line,MAXLINE);    
         if (res==-2) {
       		fprintf(stdout,"logout\n");
@@ -102,28 +103,30 @@ int leerLinea( char *linea, int maxLinea )
 	//inicio contador de bucle
 	int i=0;
 
-	char c;
+	int c=0;
 	char cwd[1024];
 	
 	char* a=getcwd(cwd,sizeof(cwd));
 
 
 	printf("\033[1;35m%s\033[0m:\033[1;34m%s\033[0m$ ", PROMPT, a); 
-
+	
 	do{
 	//Conseguir caracter, guardarlo en la linea.
+		if(i>=maxLinea){
+			while (c!= '\n' && c!= EOF) c = getchar();
+			return -1;
+		}	
 		c=getchar();
 		linea[i]=c;
-		if(i>=maxLinea){
-			return -1;
-		}
+		
 		if(c==EOF){
 			return -2;	
 		}
 		i++;
 		
 	}while(c!='\n');
-	return i+1;
+	return i;
 	 
 }
 
@@ -169,6 +172,8 @@ void visualizar( void )
 		printf("-->Orden %d: %s \n",i+1,ordenes[i]);
 		
 		printf("-->Numero de argumentos: %d \n",na[i]);
+
+		j=0;
 				
 		while(j<na[i]){
 			printf("-->Los argumentos son: %s \n",g_arg[i][j]);

@@ -42,6 +42,7 @@
 
 
 extern int ejecutar (int nordenes , int *nargs , char **ordenes , char ***args , int bgnd);
+extern void informar_bg(void);
 
 #endif
 

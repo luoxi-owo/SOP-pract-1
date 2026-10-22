@@ -16,24 +16,30 @@
 
 int ejecutar (int nordenes , int *nargs , char **ordenes , char ***args , int bgnd)
 {	
-	if(bgnd==0){
-		int i,aux;
+	int i,aux;
 		for(i=0;i<nordenes ;i++){
 			aux=fork();
-			if(aux==0){
-				redirigir_entrada(i);
-				redirigir_salida(i);
+			if(aux == -1){ /* comprobamos si no crea el hijo*/
+				perror("fork");
 				cerrar_fd();
-				int e=execvp(ordenes[i],args[i]);
-				if(e==-1){
-					printf("Ha habido un error en la orden %d: %s",i,ordenes[i]);
+				return ERROR;
+			}
+			if(aux==0){
+				if (redirigir_entrada(i) == ERROR || redirigir_salida(i) == ERROR){
+					exit(1);
+				}
+				cerrar_fd();
+				args[i][nargs[i]] = NULL; /*Vaciamos la memoria por si no viene vacía*/
+				execvp(ordenes[i],args[i]);
+				fprintf(stderr,"Ha habido un error en la orden %d: %s\n",i,ordenes[i]); /* Si el exec falla lanza el print de error y hace exit para que el hijo no se quede vivo*/
+				exit(1);
 				}
 			}
-		}
+		
 	
 	cerrar_fd();
-	while(wait(NULL)!=-1);
+	if (!bgnd) while(wait(NULL)!=-1); /* Esperamos mientras no este en background*/
 	
-	}
+	
 	return OK;
 } // Fin de la funcion "ejecutar"
