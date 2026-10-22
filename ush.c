@@ -168,7 +168,7 @@ void visualizar( void )
 
 	
 	while(i<n){
-		printf("-->Orden %d: %s \n",i+1,ordenes[i]);
+		printf("\033[1m-->Orden %d: %s\033[0m\n", i+1, ordenes[i]);	
 		
 		printf("-->Numero de argumentos: %d \n",na[i]);
 
