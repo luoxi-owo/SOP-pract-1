@@ -21,7 +21,7 @@ int ejecutar (int nordenes , int *nargs , char **ordenes , char ***args , int bg
 		aux=fork();
 		if(aux == -1){
 			perror("fork");
-			cerrar_fd;
+			cerrar_fd();
 			return ERROR;
 		}
 		if(aux==0){
@@ -31,11 +31,11 @@ int ejecutar (int nordenes , int *nargs , char **ordenes , char ***args , int bg
 			cerrar_fd();
 			args[i][nargs[i]] = NULL;
 			execvp(ordenes[i],args[i]);
-			fprintf(stderr, "Ha habido un error en la orden %d: %s",i,ordenes[i]); /* si el exec falla se lanza el print de error y hace exit para que el hijo no quede vivo*/
+			fprintf(stderr, "Ha habido un error en la orden %d: %s\n",i,ordenes[i]); /* si el exec falla se lanza el print de error y hace exit para que el hijo no quede vivo*/
 			exit(1);
 			}
 		}
 	cerrar_fd();
-	if (!bgnd) while (wait(NULL)!=1); /* esperamos mientras no está en background*/
+	if (!bgnd) while (wait(NULL)!=-1); /* esperamos mientras no está en background*/
 	return OK;
 } // Fin de la funcion "ejecutar"

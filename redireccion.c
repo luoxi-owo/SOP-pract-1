@@ -68,7 +68,7 @@ int pipeline(int nordenes, char * infile, char * outfile, int append, int bgnd)
 
 	while(i<nordenes-1){
 		if(pipe(fd)==-1){
-			perror (pipe);
+			perror ("pipe");
 			cerrar_fd();
 			return ERROR;
 		}
@@ -101,7 +101,7 @@ int redirigir_entrada(int i)
 	if(red_ordenes[i].entrada!= STDIN_FILENO){
 		int e=dup2(red_ordenes[i].entrada,STDIN_FILENO);
 		if(e==-1){
-			perror(dup2);
+			perror("dup2");
 			return ERROR;
 		}
 	}
@@ -113,10 +113,10 @@ int redirigir_entrada(int i)
 int redirigir_salida(int i)
 {
 
-	if(red_ordenes[i].salida!=STDIN_FILENO){
+	if(red_ordenes[i].salida!=STDOUT_FILENO){
 		int e=dup2(red_ordenes[i].salida,STDOUT_FILENO);
 		if(e==-1){
-			perror(dup2);
+			perror("dup2");
 			return ERROR;
 		}
 	}
