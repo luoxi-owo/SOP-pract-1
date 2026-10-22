@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <ejecucion.h>
+
 
 REDIRECCION_ORDENES red_ordenes;
 
@@ -104,7 +104,7 @@ int redirigir_entrada(int i)
 	if(red_ordenes[i].entrada != STDIN_FILENO){
 		int e=dup2(red_ordenes[i].entrada,STDIN_FILENO);
 		if(e==-1){
-			perror("dup2")
+			perror("dup2");
 			return ERROR;
 		}
 	}
@@ -119,7 +119,7 @@ int redirigir_salida(int i)
 	if(red_ordenes[i].salida != STDOUT_FILENO){
 		int e=dup2(red_ordenes[i].salida,STDOUT_FILENO);
 		if(e==-1){
-			perror("dup2")
+			perror("dup2");
 			return ERROR;
 		}
 	}

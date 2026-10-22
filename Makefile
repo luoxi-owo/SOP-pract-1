@@ -17,10 +17,10 @@ ush: ush.c defines.h analizador.h redireccion.h $(lib_file) analizador.o redirec
 analizador.o: analizador.c defines.h
 	gcc -c analizador.c
 
-redireccion.o: redireccion.c defines.h
+redireccion.o: redireccion.c defines.h analizador.h redireccion.h
 	gcc -c redireccion.c
 
-ejecucion.o: ejecucion.c defines.h analizador.c redireccion.h
+ejecucion.o: ejecucion.c defines.h analizador.c redireccion.h ejecucion.h
 	gcc -c ejecucion.c
 
 clean:
