@@ -37,14 +37,18 @@ int pipeline(int nordenes, char * infile, char * outfile, int append, int bgnd)
 	redireccion_ini();
 	
 	int i=0;
-
+	if (nordenes > PIPELINE-1) {                 
+		fprintf(stderr, "Demasiadas ordenes (maximo %d)\n", PIPELINE-1);
+		return ERROR;
+	}
 	if(infile[0]!='\0'){
 		fd1 = open(infile,O_RDONLY);
 
 		if(fd1==-1){
+			perror(infile);
 			return ERROR;
 		}
-		redirigir_entrada(fd1);
+		red_ordenes[0].entrada = fd1;
 	}
 
 	if(outfile[0]!='\0'){
@@ -55,22 +59,30 @@ int pipeline(int nordenes, char * infile, char * outfile, int append, int bgnd)
 		}
 
 		if (fd2 == -1){
+			perror (outfile);
+			cerrar_fd();
 			return ERROR;
 		}
-		redirigir_salida(fd2);
+		red_ordenes[nordenes-1].salida = fd2;
 	}
 
 	while(i<nordenes-1){
-		pipe(fd);
+		if(pipe(fd)==-1){
+			perror (pipe);
+			cerrar_fd();
+			return ERROR;
+		}
 		red_ordenes[i].salida = fd[1];
 		red_ordenes[i+1].entrada = fd[0];
 		i++;
 	}
 
-	if (bgnd){
-		fd1 = open("/dev/null", O_RDONLY);
+	if (bgnd && infile[0] == '\0'){
+		red_ordenes[0].entrada = open("/dev/null", O_RDONLY);
 
-		if (fd1 == -1){
+		if (red_ordenes[0].entrada  == -1){
+			perror(("/dev/null"));
+			cerrar_fd();
 			return ERROR;
 		}
 	}
@@ -86,9 +98,10 @@ int pipeline(int nordenes, char * infile, char * outfile, int append, int bgnd)
 int redirigir_entrada(int i)
 {
 	
-	if(red_ordenes[i].entrada!=1){
+	if(red_ordenes[i].entrada!= STDIN_FILENO){
 		int e=dup2(red_ordenes[i].entrada,STDIN_FILENO);
 		if(e==-1){
+			perror(dup2);
 			return ERROR;
 		}
 	}
@@ -100,9 +113,10 @@ int redirigir_entrada(int i)
 int redirigir_salida(int i)
 {
 
-	if(red_ordenes[i].salida!=0){
+	if(red_ordenes[i].salida!=STDIN_FILENO){
 		int e=dup2(red_ordenes[i].salida,STDOUT_FILENO);
 		if(e==-1){
+			perror(dup2);
 			return ERROR;
 		}
 	}

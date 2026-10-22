@@ -102,7 +102,7 @@ int leerLinea( char *linea, int maxLinea )
 	//inicio contador de bucle
 	int i=0;
 
-	char c;
+	int c=0;
 	char cwd[1024];
 	
 	char* a=getcwd(cwd,sizeof(cwd));
@@ -112,18 +112,20 @@ int leerLinea( char *linea, int maxLinea )
 
 	do{
 	//Conseguir caracter, guardarlo en la linea.
-		c=getchar();
-		linea[i]=c;
 		if(i>=maxLinea){
+			while (c != '\n'&& c != EOF) c=getchar(); /*vacia el resto de la linea*/
 			return -1;
 		}
+
+		c=getchar();
+		linea[i]=c;
 		if(c==EOF){
 			return -2;	
 		}
 		i++;
 		
 	}while(c!='\n');
-	return i+1;
+	return i;
 	 
 }
 
@@ -169,6 +171,8 @@ void visualizar( void )
 		printf("-->Orden %d: %s \n",i+1,ordenes[i]);
 		
 		printf("-->Numero de argumentos: %d \n",na[i]);
+
+		j=0; /*inicializamos la variable para el bucle interior*/
 				
 		while(j<na[i]){
 			printf("-->Los argumentos son: %s \n",g_arg[i][j]);
