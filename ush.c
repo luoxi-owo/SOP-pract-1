@@ -195,7 +195,7 @@ void visualizar( void )
 		printf("-->Fichero salida: %s \n",f_s);
 		int mod=es_append();
 		if(mod==1){
-			printf("-->Modo append \n");
+			printf("-->Modo Append \n");
 		}
 		else if(mod==0){
 			printf("-->Modo Trunc \n");
